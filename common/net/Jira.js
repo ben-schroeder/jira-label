@@ -14,7 +14,7 @@ class Jira {
             pathname: `/rest/api/2/issue/${issueId}`,
         }, {
             method: 'PUT',
-            body: JSON.stringify({update:{labels:[{add: data}]}}),
+            body: {update:{labels:[{add: data}]}},
         })
     }
 
