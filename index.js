@@ -1,16 +1,43 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+const fs = require('fs')
+const YAML = require('yaml')
+const core = require('@actions/core')
 
-try {
-  // `who-to-greet` input defined in action metadata file
-  const nameToGreet = core.getInput('who-to-greet');
-  console.log(`Hello ${nameToGreet}!`);
-  const time = (new Date()).toTimeString();
-  core.setOutput("time", time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
-} catch (error) {
-  core.setFailed(error.message);
+const cliConfigPath = `${process.env.HOME}/.jira.d/config.yml`
+const configPath = `${process.env.HOME}/jira/config.yml`
+const Action = require('./action')
+
+const githubEvent = require(process.env.GITHUB_EVENT_PATH)
+const config = YAML.parse(fs.readFileSync(configPath, 'utf8'))
+
+async function exec () {
+  try {
+    const result = await new Action({
+      githubEvent,
+      argv: parseArgs(),
+      config,
+    }).execute()
+
+    if (result) {
+      const extendedConfig = Object.assign({}, config, result)
+
+      fs.writeFileSync(configPath, YAML.stringify(extendedConfig))
+
+      return
+    }
+
+    console.log('Failed to label an issue.')
+    process.exit(78)
+  } catch (error) {
+    console.error(error)
+    process.exit(1)
+  }
 }
 
+function parseArgs () {
+  return {
+    issue: core.getInput('issue'),
+    comment: core.getInput('comment')
+  }
+}
+
+exec()
