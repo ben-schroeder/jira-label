@@ -1,0 +1,12 @@
+name: Jira Add Label
+description: Add a label to an issue
+inputs:
+  issue:
+    description: Key of the issue to be labeled
+    required: true
+  label:
+    description: Label
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
