@@ -17,8 +17,12 @@ module.exports = class {
     const issueId = this.argv.issue || this.config.issue || null
     const { label: label } = this.argv
 
-    console.log(`Adding label to ${issueId}: \n${label}`)
-    await this.Jira.addLabel(issueId, label)
+    if (issueId && label) {
+      console.log(`Adding label to ${issueId}: \n${label}`)
+      await this.Jira.addLabel(issueId, label)
+    } else {
+      console.log('No issue or label found.')
+    }
 
     return {}
   }
