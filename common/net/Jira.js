@@ -13,8 +13,8 @@ class Jira {
         return this.fetch('addLabel', {
             pathname: `/rest/api/2/issue/${issueId}`,
         }, {
-            method: 'POST',
-            body: JSON.stringify({"update":{"labels":[{"add": data}]}}),
+            method: 'PUT',
+            body: JSON.stringify({update:{labels:[{add: data}]}}),
         })
     }
 
