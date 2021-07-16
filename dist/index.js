@@ -9064,7 +9064,7 @@ async function exec () {
 function parseArgs () {
   return {
     issue: core.getInput('issue'),
-    comment: core.getInput('label')
+    label: core.getInput('label')
   }
 }
 
