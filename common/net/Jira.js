@@ -1,5 +1,3 @@
-const { get } = require('lodash')
-
 const serviceName = 'jira'
 const { format } = require('url')
 const client = require('./client')(serviceName)
@@ -16,7 +14,7 @@ class Jira {
             pathname: `/rest/api/2/issue/${issueId}`,
         }, {
             method: 'POST',
-            body:  {"update":{"labels":[{"add": data}]}},
+            body: JSON.stringify({"update":{"labels":[{"add": data}]}}),
         })
     }
 
