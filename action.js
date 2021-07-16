@@ -15,7 +15,7 @@ module.exports = class {
 
   async execute () {
     const issueId = this.argv.issue || this.config.issue || null
-    const { comment: label } = this.argv
+    const { label: label } = this.argv
 
     console.log(`Adding label to ${issueId}: \n${label}`)
     await this.Jira.addLabel(issueId, label)
